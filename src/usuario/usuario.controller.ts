@@ -4,15 +4,24 @@ import { UsuarioEntity } from "./usuario.entity";
 import { criaUsuarioDTO } from "./dto/usuario.dto";
 import {v4 as uuid} from 'uuid';
 import { ListaUsuarioDTO } from "./dto/consulta.dto";
-import { alteraUsuarioDTO } from "./dto/auteraUsuario.dto";
-@Controller('/usuarios')
+import { alteraUsuarioDTO } from "./dto/alteraUsuario.dto";
+import { LoginUsuarioDTO } from "./dto/loginUsuario.dto";
+import { ApiAcceptedResponse, ApiBadRequestResponse, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+
+@ApiTags('usuario')
+//decorator responsavel por definir que essa class
+
+@Controller('/usuarios')
 export class UsuarioController{
+
 constructor(private clsUsuarioArmazenados: UsuarioArmazenados){}
 
     @Post()
-
-    async criaUsuario(@Body() dadosUsuario: criaUsuarioDTO){
+    @ApiResponse({status: 201, description:'Retorno que hoube sucesso'})
+    @ApiBadRequestResponse({description: 'Retornar a informação que houve status 201'})
+       async criaUsuario(@Body() dadosUsuario: criaUsuarioDTO){
+    
 
     // var validacoes = this.clsUsuarioArmazenados.validaUsuario(dadosUsuario);
      //if (validacoes.length> 0){
@@ -29,7 +38,7 @@ constructor(private clsUsuarioArmazenados: UsuarioArmazenados){}
 
 
         var usuario={
-            dadosUsuario : dadosUsuario,
+            dadosUsuario : novoUsuario,
             status: "Usuario criado"
         }
         return usuario
@@ -46,6 +55,7 @@ constructor(private clsUsuarioArmazenados: UsuarioArmazenados){}
                 usuario.nome,
                 usuario.cidade,
                 usuario.email,
+                usuario.senha,
 
             )
         )
@@ -70,4 +80,18 @@ constructor(private clsUsuarioArmazenados: UsuarioArmazenados){}
         usuario: usuarioRemovido,
         message: 'Usuario removido'}
     }
+
+    @Post("/login")
+    async login(@Body() dadoslogin: LoginUsuarioDTO){
+        var login  = this.clsUsuarioArmazenados.validarLogin(dadoslogin.email, dadoslogin.senha);
+ 
+        return{
+            status: login.login,
+            usuario: login.login?login.usuario: null,
+            message: login?"login Efetuado" : "Usuario ou senha Invalidos"
+        }
+    }
 }
+
+
+

@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { UsuarioEntity } from "./usuario.entity";
 
+
 @Injectable()
 export class UsuarioArmazenados{
     #usuarios: UsuarioEntity[]=[];
@@ -38,8 +39,19 @@ export class UsuarioArmazenados{
 
     Object.entries(dadosAtualizacao).forEach(
         ([chave,valor]) =>{
+            if(valor === undefined){
+                 return
+            }
+
             if (chave === 'id'){
                 return
+
+            }else if (chave === 'senha'){
+                usuario.trocarSenha(valor);
+                return
+            }
+            if(valor === undefined){
+
             }
             usuario [chave] = valor;
         }
@@ -88,4 +100,22 @@ export class UsuarioArmazenados{
 
 // }
 
+private buscarPorEmail(email:string){
+    const possivelUsuario =      this.#usuarios.find(
+    usuarioSalvo => usuarioSalvo.email === email
+   )
+
+   if (!possivelUsuario){
+    throw new Error ('Usuario nao Encontrado')
+   }
+   return possivelUsuario;
+
+}
+validarLogin(email:string, senha:string){
+    const usuario = this.buscarPorEmail(email);
+    return {
+       login: usuario.login(senha),
+       usuario:usuario
+    }
+}
 }
