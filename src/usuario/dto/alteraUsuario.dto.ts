@@ -20,13 +20,13 @@ export class alteraUsuarioDTO{
     })
     idade: Number;
 
-    @IsString()
-    @IsOptional()
-    @ApiProperty({
-        example: 'Bauru',
-        description:'deve ser enviado apenas o nome da cidade'
-    })
-    cidade: string;
+    // @IsString()
+    // @IsOptional()
+    // @ApiProperty({
+    //     example: 'Bauru',
+    //     description:'deve ser enviado apenas o nome da cidade'
+    // })
+    // cidade: string;
 
     @IsEmail(undefined,{message:"email é invalido"})
     @EmailUnico({message:"email já cadastrado. Tente novamente"})
@@ -52,5 +52,22 @@ export class alteraUsuarioDTO{
         description:'a senha deve conter letras Maiuscolas, minuscolas, numeros e caracteres'
     })
     senha: string;
+    @IsString()
+    @IsOptional()
+    @ApiProperty({
+        example: '17020050',
+    description: 'Deve ser enviado CEP valido'
+
+    })
+    cep: string;
+    
+    @IsString()
+    @IsOptional()
+    @ApiProperty({
+        example: 'Apartamento, bloco, lote',
+    description: 'deve ser informado o complemento do endereço'
+
+    })
+    complemento: string;
 
 }

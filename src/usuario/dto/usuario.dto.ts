@@ -19,12 +19,30 @@ export class criaUsuarioDTO{
     })
     idade: Number;
 
+    // @IsString()
+    // @ApiProperty({
+    //     example: 'Bauru',
+    //     description:'deve ser enviado apenas o nome da cidade'
+       
+    // })
+    // cidade: string;
+
     @IsString()
     @ApiProperty({
-        example: 'Bauru',
-        description:'deve ser enviado apenas o nome da cidade'
+        example: '17020050',
+    description: 'Deve ser enviado CEP valido'
+
     })
-    cidade: string;
+    cep: string;
+    
+    @IsString()
+    @ApiProperty({
+        example: 'Apartamento, bloco, lote',
+    description: 'deve ser informado o complemento do endereço'
+
+    })
+    complemento: string;
+    
 
     @IsEmail(undefined,{message:"email é invalido"})
     @EmailUnico({message:"email já cadastrado. Tente novamente"})
